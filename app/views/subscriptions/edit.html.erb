@@ -5,5 +5,7 @@
         <h1>Edit Subscription</h1>
     </div>
 
-    <%= render "subscriptions/form", subscription: @subscription %>
+    <%= turbo_frame_tag @subscription do %>
+        <%= render "subscriptions/form", subscription: @subscription %>
+    <% end %>
 </div>

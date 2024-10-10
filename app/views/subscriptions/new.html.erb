@@ -5,5 +5,7 @@
         <h1>New Subscription</h1>
     </div>
 
-    <%= render "subscriptions/form", subscription: @subscription %>
+    <%= turbo_frame_tag "new_subscription" do %>
+        <%= render "subscriptions/form", subscription: @subscription %>
+    <% end %>
 </div>

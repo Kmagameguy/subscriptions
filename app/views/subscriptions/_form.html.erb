@@ -1,7 +1,7 @@
 <%= form_with model: subscription  do |f| %>
     <p>
         <%= f.label :name %>
-        <%= f.text_field :name %>
+        <%= f.text_field :name, input_html: { autofocus: true } %>
     </p>
     <p>
         <%= f.label :url, "Homepage" %>
@@ -16,4 +16,5 @@
         <%= f.number_field :price, step: :any %>
     </p>
     <%= f.submit %>
+    <%= link_to "Cancel", subscriptions_path %>
 <% end %>

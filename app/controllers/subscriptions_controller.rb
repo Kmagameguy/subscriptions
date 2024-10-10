@@ -1,7 +1,7 @@
 class SubscriptionsController < ApplicationController
   before_action :find_subscription, only: %i[ show edit update destroy ]
   def index
-    @subscriptions = Subscription.all
+    @subscriptions = Subscription.all.sort_by_name
   end
 
   def show; end
@@ -15,7 +15,10 @@ class SubscriptionsController < ApplicationController
 
     if @subscription.save
       flash[:info] = "Subscription created!"
-      redirect_to subscriptions_path
+      respond_to do |format|
+        format.html { redirect_to subscriptions_path }
+        format.turbo_stream
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,7 +38,10 @@ class SubscriptionsController < ApplicationController
   def destroy
     @subscription.destroy
     flash[:info] = "Subscription Removed"
-    redirect_to subscriptions_path
+    respond_to do |format|
+      format.html { redirect_to subscriptions_path }
+      format.turbo_stream
+    end
   end
 
   private

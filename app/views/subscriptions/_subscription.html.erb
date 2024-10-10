@@ -1,0 +1,7 @@
+<%= turbo_frame_tag subscription do %>
+    <div>
+        <h2><%= link_to subscription.name, edit_subscription_path(subscription) %></h2>
+        <h3>Monthly Cost: <%= number_to_currency subscription.monthly_price, precision: 2 %>
+        <%= button_to "Delete", subscription_path(subscription), method: :delete %>
+    </div>
+<% end %>
