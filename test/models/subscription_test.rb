@@ -57,9 +57,19 @@ class SubscriptionTest < ActiveSupport::TestCase
     end
   end
 
+  describe "#sort_by_name" do
+    it "sorts all subscription records alphabetically, by name, in ascending order" do
+      Subscription.create!(name: "Netflix", price: 19.99)
+      Subscription.create!(name: "Max", price: 20.00)
+      Subscription.create!(name: "A Service", price: 1.00)
+
+      assert_equal Subscription.sort_by_name.first.name, "A Service"
+    end
+  end
+
   describe "#monthly_price" do
     it "returns the database value if it's a monthly subscription" do
-      assert_equal 10.55.to_d, @subscription.monthly_price
+      assert_equal @subscription.price, @subscription.monthly_price
     end
 
     it "divides the value by 12 if it's an annual subscription" do
@@ -67,6 +77,32 @@ class SubscriptionTest < ActiveSupport::TestCase
       @subscription.price = 12.to_d
 
       assert_equal 1.00, @subscription.monthly_price
+    end
+  end
+
+  describe "#annual_price" do
+    it "returns the database value if it's an annual subscription" do
+      @subscription.price_type = Subscription.price_types[:annually]
+
+      assert_equal @subscription.price, @subscription.annual_price
+    end
+
+    it "multiplies the value by 12 if it's a monthly subscription" do
+      @subscription.price = 1.00.to_d
+
+      assert_equal (@subscription.price * 12), @subscription.annual_price
+    end
+  end
+
+  describe "#domain" do
+    it "extracts the domain from a url" do
+      @subscription.url = "https://www.example.com/some_path/another_path?with_query=\"test\""
+
+      assert_equal "www.example.com", @subscription.domain
+    end
+
+    it "returns nil if the url is not specified" do
+      assert_nil @subscription.domain
     end
   end
 end
