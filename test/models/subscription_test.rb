@@ -9,6 +9,20 @@ class SubscriptionTest < ActiveSupport::TestCase
     )
   end
 
+  describe ".currency" do
+    it "reports the user specified currency" do
+      ENV["CURRENCY"] = "€"
+
+      assert_equal "€", Subscription.currency
+    end
+
+    it "uses the American Dollar as a default when no currency is specified" do
+      ENV["CURRENCY"] = nil
+
+      assert_equal "$", Subscription.currency
+    end
+  end
+
   describe "validations" do
     it "is valid with valid attributes" do
       _(@subscription).must_be :valid?

@@ -7,6 +7,6 @@
         <% if @subscription.url %>
             <li>Homepage: <%= link_to @subscription.url %></li>
         <% end %>
-        <li>Monthly Price: <%= number_to_currency @subscription.monthly_price %></li>
+        <li>Monthly Price: <%= number_to_currency @subscription.monthly_price, unit: Subscription.currency %></li>
     </ul>
 </div>

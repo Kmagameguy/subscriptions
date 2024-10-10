@@ -1,8 +1,8 @@
 <%= link_to "New Subscription", new_subscription_path, data: { turbo_frame: "new_subscription" } %>
 <%= turbo_frame_tag "new_subscription" %>
 
-<p>Monthly total: <%= number_to_currency @subscriptions.sum(&:monthly_price) %></p>
-<p>Annual Total: <%= number_to_currency (@subscriptions.sum(&:annual_price)) %></p>
+<p>Monthly total: <%= number_to_currency @subscriptions.sum(&:monthly_price), unit: Subscription.currency %></p>
+<p>Annual Total: <%= number_to_currency (@subscriptions.sum(&:annual_price)), unit: Subscription.currency %></p>
 
 <hr />
 

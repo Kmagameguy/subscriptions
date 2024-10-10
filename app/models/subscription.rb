@@ -6,6 +6,10 @@ class Subscription < ApplicationRecord
 
   scope :sort_by_name, -> { order(name: :asc) }
 
+  def self.currency
+    ENV.fetch("CURRENCY", "").presence || "$"
+  end
+
   def monthly_price
     (monthly? ? price : price / 12)
   end
