@@ -1,0 +1,18 @@
+<% if @subscriptions.load.any? %>
+    <h1>Subscriptions</h1>
+    <% @subscriptions.sort.each do |subscription| %>
+        <ul>
+            <li>
+                <%= link_to "#{subscription.name} (#{number_to_currency subscription.monthly_price})", subscription_path(subscription) %>
+            </li>
+        </ul>
+    <% end %>
+<% else %>
+    <p>No subscriptions found.</p>
+<% end %>
+
+<hr />
+<p>Monthly total: <%= number_to_currency @subscriptions.sum(&:monthly_price) %></p>
+<p>Annual Total: <%= number_to_currency (@subscriptions.sum(&:monthly_price) * 12) %></p>
+
+<%= link_to "New Subscription", new_subscription_path %>

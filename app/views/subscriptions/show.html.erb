@@ -1,0 +1,12 @@
+<div>
+    <%= link_to sanitize("&larr; Back to subscriptions"), subscriptions_path %>
+    <%= link_to "Edit", edit_subscription_path(@subscription) %>
+    <%= link_to "Delete", @subscription, method: :delete, data: { "turbo-method": :delete } %>
+    <h1><%= @subscription.name %></h1>
+    <ul>
+        <% if @subscription.url %>
+            <li>Homepage: <%= link_to @subscription.url %></li>
+        <% end %>
+        <li>Monthly Price: <%= number_to_currency @subscription.monthly_price %></li>
+    </ul>
+</div>

@@ -1,0 +1,9 @@
+<div>
+    <%= link_to sanitize("&larr; Back to subscriptions"), subscription_path(@subscription) %>
+
+    <div>
+        <h1>Edit Subscription</h1>
+    </div>
+
+    <%= render "subscriptions/form", subscription: @subscription %>
+</div>

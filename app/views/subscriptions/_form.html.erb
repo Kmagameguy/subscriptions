@@ -1,0 +1,19 @@
+<%= form_with model: subscription  do |f| %>
+    <p>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+    </p>
+    <p>
+        <%= f.label :url, "Homepage" %>
+        <%= f.text_field :url %>
+    </p>
+    <p>
+        <%= f.label :price_type, "Payment Interval" %>
+        <%= f.select(:price_type, Subscription.price_types.keys.map { |k| [k.titleize, k] }) %>
+    </p>
+    <p>
+        <%= f.label :price, "Price in $" %>
+        <%= f.number_field :price, step: :any %>
+    </p>
+    <%= f.submit %>
+<% end %>
