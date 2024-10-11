@@ -1,10 +1,20 @@
-<%= link_to "New Subscription", new_subscription_path, data: { turbo_frame: "new_subscription" } %>
-<%= turbo_frame_tag "new_subscription" %>
+<div id="subheader">
+    <div>
+        <p>
+            <span class="bold-label">Monthly total:</span> <%= number_to_currency @subscriptions.sum(&:monthly_price), unit: Subscription.currency %>
+        </p>
+        <p>
+            <span class="bold-label">Annual Total:</span> <%= number_to_currency (@subscriptions.sum(&:annual_price)), unit: Subscription.currency %>
+        </p>
+    </div>
+    <div>
+        <%= link_to "New Subscription", new_subscription_path, data: { turbo_frame: "new_subscription" } %>
+    </div>
+</div>
 
-<p>Monthly total: <%= number_to_currency @subscriptions.sum(&:monthly_price), unit: Subscription.currency %></p>
-<p>Annual Total: <%= number_to_currency (@subscriptions.sum(&:annual_price)), unit: Subscription.currency %></p>
-
-<hr />
+<div id="new-form">
+    <%= turbo_frame_tag "new_subscription" %>
+</div>
 
 <div id="subscriptions">
     <%= render @subscriptions %>

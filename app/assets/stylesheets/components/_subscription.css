@@ -1,0 +1,23 @@
+.subscription {
+    display: flex;
+    width: 24rem;
+    flex-direction: column;
+    border: 1px solid black;
+    transition: box-shadow 0.2s ease;
+    padding: 1rem 2rem;
+}
+
+.subscription:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.subscription h2 {
+    margin-bottom: 1.5rem;
+}
+
+.subscription-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+}
