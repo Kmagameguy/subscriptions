@@ -5,6 +5,7 @@
     border: 1px solid black;
     transition: box-shadow 0.2s ease;
     padding: 1rem 2rem;
+    cursor: default;
 }
 
 .subscription:hover {
