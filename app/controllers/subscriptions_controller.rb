@@ -37,6 +37,7 @@ class SubscriptionsController < ApplicationController
 
   def destroy
     @subscription.destroy
+
     flash[:info] = "Subscription Removed"
     respond_to do |format|
       format.html { redirect_to subscriptions_path }
