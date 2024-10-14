@@ -1,7 +1,11 @@
 class SubscriptionsController < ApplicationController
   before_action :find_subscription, only: %i[ show edit update destroy ]
   def index
-    @subscriptions = Subscription.all.sort_by_name
+    if current_user.blank?
+      @subscriptions = Subscription.none
+    else
+      @subscriptions = current_user.subscriptions.sort_by_name
+    end
   end
 
   def show; end
@@ -11,7 +15,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-    @subscription = Subscription.new(subscription_params)
+    @subscription = Subscription.new(subscription_params.merge(user: current_user))
 
     if @subscription.save
       flash[:info] = "Subscription created!"
@@ -27,7 +31,7 @@ class SubscriptionsController < ApplicationController
   def edit; end
 
   def update
-    if @subscription.update(subscription_params)
+    if @subscription.update(subscription_params.merge(user: current_user))
       flash[:info] = "Subscription Updated"
       redirect_to subscriptions_path
     else
