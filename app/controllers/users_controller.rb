@@ -12,6 +12,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = "Sign-up Successful"
+      session[:user_id] = @user.id
       redirect_to subscriptions_path
     else
       flash[:alert] = "Sign-up Failed"

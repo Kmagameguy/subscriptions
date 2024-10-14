@@ -21,6 +21,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url(user: @valid_user)
 
       assert_redirected_to subscriptions_url
+      assert_not_nil session[:user_id]
       assert_equal flash[:notice], "Sign-up Successful"
     end
 
