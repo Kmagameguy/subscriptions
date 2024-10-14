@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subscription: one
+  price: 9.99
+  effective_date: 2024-10-14 23:00:01
+  price_type: 1
+
+two:
+  subscription: two
+  price: 9.99
+  effective_date: 2024-10-14 23:00:01
+  price_type: 1

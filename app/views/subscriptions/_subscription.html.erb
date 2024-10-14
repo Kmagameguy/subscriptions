@@ -1,8 +1,13 @@
 <%= turbo_frame_tag subscription do %>
     <div class="subscription">
         <div class="subscription-card-header">
-            <img src="<%= subscription.icon %>">
-            <h2><%= subscription.name %></h2>
+            <div class="subscription-name">
+                <img src="<%= subscription.icon %>">
+                <h2><%= subscription.name %></h2>
+            </div>
+            <div class="subscription-price-change-percentage">
+                <p><%= percentage_increase_text(subscription) %></p>
+            </div>
         </div>
         <div class="subscription-footer">
             <h3>Monthly Cost: <%= number_to_currency subscription.monthly_price, precision: 2, unit: Subscription.currency %></h3>

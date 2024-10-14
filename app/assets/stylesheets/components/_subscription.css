@@ -16,9 +16,41 @@
 
 .subscription-card-header {
     display: flex;
+    justify-content: space-between;
+    align-items: first baseline;
+    margin-bottom: 1.5rem;
+}
+
+.subscription-name {
+    display: flex;
     align-items: first baseline;
     gap: 0.25rem;
-    margin-bottom: 1.5rem;
+}
+
+.subscription-price-change-percentage .no-price-change::after {
+    content: " 😇"
+}
+
+.subscription-price-change-percentage .moderate-price-change {
+    color: var(--color-secondary);
+}
+
+.subscription-price-change-percentage .moderate-price-change::after {
+    content: " 😢"
+}
+
+.subscription-price-change-percentage .large-price-change,
+.subscription-price-change-percentage .absurd-price-change {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.subscription-price-change-percentage .large-price-change::after {
+    content: " 😭"
+}
+
+.subscription-price-change-percentage .absurd-price-change::after {
+    content: " 💀"
 }
 
 .subscription img {
