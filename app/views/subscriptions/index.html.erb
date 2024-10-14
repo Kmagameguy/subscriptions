@@ -1,22 +1,8 @@
-<div id="subheader">
-    <div>
-        <p>
-            <span class="bold-label">Monthly total:</span> <%= number_to_currency @subscriptions.sum(&:monthly_price), unit: Subscription.currency %>
-        </p>
-        <p>
-            <span class="bold-label">Annual Total:</span> <%= number_to_currency (@subscriptions.sum(&:annual_price)), unit: Subscription.currency %>
-        </p>
+<% if current_user %>
+    <div id="new-subscription-btn-container">
+        <%= link_to "+ New Subscription", new_subscription_path, { data: { turbo_frame: "new_subscription" }, class: "new-subscription-btn" } %>
     </div>
-    <div>
-        <%= link_to "New Subscription", new_subscription_path, data: { turbo_frame: "new_subscription" } %>
-        <% if current_user %>
-            <p><%= current_user.name %></p>
-            <%= link_to "Log Out", user_sessions_path, method: :delete, data: { turbo_method: :delete } %>
-        <% else %>
-            <%= link_to "Sign In", new_user_sessions_path %>
-        <% end %>
-    </div>
-</div>
+<% end %>
 
 <div id="new-form">
     <%= turbo_frame_tag "new_subscription" %>

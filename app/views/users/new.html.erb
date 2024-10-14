@@ -25,9 +25,10 @@
             <%= f.label :password_confirmation %>
             <%= f.password_field :password_confirmation %>
         </div>
-        <div class="form-row">
-            <%= f.submit %>
+        <div class="form-actions">
+            <%= f.submit "Sign Up", { class: "primary-button" } %>
+            <%= link_to "Already have an account? Login instead.", new_user_sessions_path %>
         </div>
     <% end %>
-    <%= link_to "Already have an account? Login instead.", new_user_sessions_path %>
+
 </div>

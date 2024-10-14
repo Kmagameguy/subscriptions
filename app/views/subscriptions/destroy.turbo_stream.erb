@@ -1,1 +1,9 @@
+<%= turbo_stream.update "monthly_total" do %>
+    <%= number_to_currency total_monthly, unit: Subscription.currency %>
+<% end %>
+
+<%= turbo_stream.update "annual_total" do %>
+    <%= number_to_currency total_annually, unit: Subscription.currency %>
+<% end %>
+
 <%= turbo_stream.remove @subscription %>

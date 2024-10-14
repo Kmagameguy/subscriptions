@@ -1,0 +1,23 @@
+<div id="subheader">
+    <h3>Subscription Manager</h3>
+    <div id="user-menu">
+        <% if current_user %>
+            <div id="user-state-management">
+                <p>Hello, <%= current_user.name %></p>
+
+                <%= link_to "Log Out", user_sessions_path, method: :delete, data: { turbo_method: :delete } %>
+            </div>
+            <div id="totals">
+                <p>
+                    <span class="bold-label">Monthly total:</span> <span id="monthly_total"><%= number_to_currency total_monthly, unit: Subscription.currency %></span>
+                </p>
+                |
+                <p>
+                    <span class="bold-label">Annual total:</span> <span id="annual_total"><%= number_to_currency total_annually, unit: Subscription.currency %></span>
+                </p>
+            </div>
+        <% else %>
+            <%= link_to "Sign In", new_user_sessions_path %>
+        <% end %>
+    </div>
+</div>
