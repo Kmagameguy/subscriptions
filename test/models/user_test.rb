@@ -26,6 +26,17 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  describe "associations" do
+    before { @user.save! }
+
+    it "can have many subscriptions" do
+      subscription = Subscription.new(name: "Sub", url: "https://www.example.com", price_type: Subscription.price_types[:monthly], price: "1.00", user: @user)
+
+      assert_respond_to @user, :subscriptions
+      assert_equal subscription.user, @user
+    end
+  end
+
   describe "password authentication" do
     before { @user.save! }
 

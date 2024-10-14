@@ -2,12 +2,17 @@ require "test_helper"
 
 class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   before do
+    @valid_password = "secure_password"
+    @user = User.create!(name: "John Doe", password: @valid_password, password_confirmation: @valid_password)
     @subscription = Subscription.create!(
       name: "My Subscription",
       url: "https://www.example.com",
       price_type: Subscription.price_types[:monthly],
-      price: 19.99.to_d
+      price: 19.99.to_d,
+      user: @user
     )
+
+    post user_sessions_url(user: { name: @user.name, password: @valid_password, password_confirmation: @valid_password })
   end
 
   describe "#index" do
@@ -38,7 +43,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
 
   describe "#create" do
     it "creates a new subscription" do
-      params = { subscription: { name: "My Cool Subscription", price: 10.99 } }
+      params = { subscription: { name: "My Cool Subscription", price: 10.99, user: @user } }
       post subscriptions_url(params)
 
       assert_equal "Subscription created!", flash[:info]

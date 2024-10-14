@@ -4,6 +4,8 @@ class Subscription < ApplicationRecord
 
   enum :price_type, %i[ monthly annually ]
 
+  belongs_to :user
+
   scope :sort_by_name, -> { order(name: :asc) }
 
   def self.currency
