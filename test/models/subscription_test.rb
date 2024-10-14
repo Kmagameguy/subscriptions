@@ -2,10 +2,13 @@ require "test_helper"
 
 class SubscriptionTest < ActiveSupport::TestCase
   before do
+    @valid_password = "secure_password"
+    @user = User.create!(name: "John Doe", password: @valid_password, password_confirmation: @valid_password)
     @subscription = Subscription.new(
       name: "My Subscription",
       price_type: Subscription.price_types[:monthly],
-      price: 10.55.to_d
+      price: 10.55.to_d,
+      user: @user
     )
   end
 
@@ -73,9 +76,9 @@ class SubscriptionTest < ActiveSupport::TestCase
 
   describe "#sort_by_name" do
     it "sorts all subscription records alphabetically, by name, in ascending order" do
-      Subscription.create!(name: "Netflix", price: 19.99)
-      Subscription.create!(name: "Max", price: 20.00)
-      Subscription.create!(name: "A Service", price: 1.00)
+      @user.subscriptions.create!(name: "Netflix", price: 19.99)
+      @user.subscriptions.create!(name: "Max", price: 20.00)
+      @user.subscriptions.create!(name: "A Service", price: 1.00)
 
       assert_equal Subscription.sort_by_name.first.name, "A Service"
     end
