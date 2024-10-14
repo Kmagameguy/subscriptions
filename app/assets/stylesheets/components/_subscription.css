@@ -6,14 +6,24 @@
     transition: box-shadow 0.2s ease;
     padding: 1rem 2rem;
     cursor: default;
+    height: 100%;
+    justify-content: space-between;
 }
 
 .subscription:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-.subscription h2 {
+.subscription-card-header {
+    display: flex;
+    align-items: first baseline;
+    gap: 0.25rem;
     margin-bottom: 1.5rem;
+}
+
+.subscription img {
+    width: 16px;
+    height: 16px;
 }
 
 .subscription-footer {

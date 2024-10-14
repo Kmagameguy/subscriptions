@@ -6,6 +6,49 @@
     padding: 0.5rem 6rem;
 }
 
+#subheader #user-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#subheader #user-menu #user-state-management {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#subheader #user-menu #totals {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#new-subscription-btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem 1rem 0 0;
+}
+
+.new-subscription-btn {
+    padding: 10px 15px;
+    color: white;
+    background: var(--color-primary);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.new-subscription-btn:focus,
+.new-subscription-btn:focus-visible,
+.new-subscription-btn:focus-within,
+.new-subscription-btn:hover {
+    color: white;
+    background: var(--color-primary-rotate);
+}
+
+.new-subscription-btn:visited {
+    color: white;
+    background: var(--color-primary);
+}
+
 #new-form {
     display: flex;
     justify-content: center;

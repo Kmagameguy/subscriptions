@@ -15,18 +15,28 @@
     height: 48px;
 }
 
-.form-row input {
+.subscription-form .form-row input {
     padding: 0.2rem;
 }
 
-.form-row select {
+.subscription-form .form-row select {
     padding: 0 0.5rem;
     height: 100%;
     width: 97%;
 }
 
-.form-actions {
+.subscription-form .form-actions {
     display: flex;
+    align-items: center;
     justify-content: space-around;
     margin-top: 1rem;
+}
+
+.form-actions input[type=submit] {
+    padding: 5px 15px;
+    color: white;
+    background: var(--color-primary);
+    border: 0 none;
+    cursor: pointer;
+    border-radius: 5px;
 }

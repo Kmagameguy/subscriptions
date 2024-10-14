@@ -20,6 +20,10 @@ class Subscription < ApplicationRecord
     (annually? ? price : price * 12)
   end
 
+  def icon
+    "https://www.google.com/s2/favicons?domain=#{domain}"
+  end
+
   def domain
     # Used to fetch favicons from this URL:
     # https://www.google.com/s2/favicons?domain=#{domain}

@@ -20,15 +20,9 @@
     padding: 0.2rem;
 }
 
-.sign-up-container input[type=submit] {
-    padding: 5px 15px;
-    color: white;
-    background: var(--color-primary);
-    border: 0 none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.sign-up-container input[type=submit]:hover {
-    background: var(--color-primary-rotate);
+.sign-up-container .form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin: 0.2rem 0;
 }

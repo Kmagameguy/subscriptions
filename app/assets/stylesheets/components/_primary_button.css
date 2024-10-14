@@ -1,0 +1,12 @@
+.primary-button {
+    padding: 5px 15px;
+    color: white;
+    background: var(--color-primary);
+    border: 0 none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.primary-button:hover {
+    background: var(--color-primary-rotate);
+}

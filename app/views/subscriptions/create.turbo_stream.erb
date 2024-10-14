@@ -1,2 +1,13 @@
-<%= turbo_stream.prepend "subscriptions", @subscription %>
 <%= turbo_stream.update "new_subscription", "" %>
+
+<%= turbo_stream.update "monthly_total" do %>
+    <%= number_to_currency total_monthly, unit: Subscription.currency %>
+<% end %>
+
+<%= turbo_stream.update "annual_total" do %>
+    <%= number_to_currency total_annually, unit: Subscription.currency %>
+<% end %>
+
+<%= turbo_stream.update "subscriptions" do %>
+    <%= render current_user.subscriptions.sort_by_name %>
+<% end %>
