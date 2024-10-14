@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo "== Starting Rails Console =="
+bundle exec rails console
