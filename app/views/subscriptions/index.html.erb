@@ -9,6 +9,12 @@
     </div>
     <div>
         <%= link_to "New Subscription", new_subscription_path, data: { turbo_frame: "new_subscription" } %>
+        <% if current_user %>
+            <p><%= current_user.name %></p>
+            <%= link_to "Log Out", user_sessions_path, method: :delete, data: { turbo_method: :delete } %>
+        <% else %>
+            <%= link_to "Sign In", new_user_sessions_path %>
+        <% end %>
     </div>
 </div>
 

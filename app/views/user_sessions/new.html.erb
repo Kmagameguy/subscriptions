@@ -1,0 +1,18 @@
+<div class="login-container">
+    <%= link_to sanitize("&larr; Home"), root_path %>
+    <h1>Login</h1>
+    <%= form_with model: @user, url: user_sessions_path do |f| %>
+        <div class="form-row">
+            <%= f.label :name %>
+            <%= f.text_field :name %>
+        </div>
+        <div class="form-row">
+            <%= f.label :password %>
+            <%= f.password_field :password %>
+        </div>
+        <div class="form-row">
+            <%= link_to "Sign Up", new_user_path %>
+            <%= f.submit "Login" %>
+        </div>
+    <% end %>
+</div>

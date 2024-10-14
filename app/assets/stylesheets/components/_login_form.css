@@ -1,0 +1,30 @@
+.login-container {
+    display: flex;
+    width: 24rem;
+    flex-direction: column;
+    border: 1px solid black;
+    padding: 1rem 2rem;
+    margin: 1rem 2rem;
+    box-shadow: 010px 20px(0, 0, 0, 0.5);
+}
+
+.login-container .form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.1rem 0;
+    height: 48px;
+}
+
+.login-container input[type=submit] {
+    padding: 5px 15px;
+    color: white;
+    background: var(--color-primary);
+    border: 0 none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.login-container input[type=submit]:hover {
+    background: var(--color-primary-rotate);
+}
