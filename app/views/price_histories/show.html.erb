@@ -1,0 +1,10 @@
+<% if @price_history.load.any? %>
+    <% @price_history.each do |history| %>
+        <div class="price-history">
+          <p><%= history.effective_date %></p>
+          <p>
+              <%= number_to_currency history.price, unit: Subscription.currency %> <%= PriceHistory.price_types[history.price_type] %>
+          </p>
+        </div>
+    <% end %>
+<% end %>
