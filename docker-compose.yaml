@@ -9,8 +9,8 @@ services:
     - 3000:3000
     restart: unless-stopped
     environment:
-      RAILS_FORCE_SSL: "false"
-      RAILS_ASSUME_SSL: "false"
+      RAILS_FORCE_SSL: ${RAILS_FORCE_SSL:-false}
+      RAILS_ASSUME_SSL: ${RAILS_ASSUME_SSL:-false}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:?}
       DB_HOST: postgres
       POSTGRES_DB: ${POSTGRES_DB:-subscriptions_production}
