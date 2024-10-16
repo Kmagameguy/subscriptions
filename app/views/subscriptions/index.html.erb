@@ -2,12 +2,23 @@
     <div id="new-subscription-btn-container">
         <%= link_to "+ New Subscription", new_subscription_path, { data: { turbo_frame: "new_subscription" }, class: "new-subscription-btn" } %>
     </div>
+
+    <div id="new-form">
+      <%= turbo_frame_tag "new_subscription" %>
+    </div>
+
+    <div id="subscriptions">
+      <%= render @subscriptions %>
+    </div>
+<% else %>
+    <div id="welcome-text">
+        <div>
+          <h1>Hello, there!</h1>
+          <h3>
+              This subscription manager lets you keep tabs on everything from
+              your favorite streaming services to your gym membership.
+              Sign in (or Sign up!) to get started!
+          </h3>
+        </div>
+    </div>
 <% end %>
-
-<div id="new-form">
-    <%= turbo_frame_tag "new_subscription" %>
-</div>
-
-<div id="subscriptions">
-    <%= render @subscriptions %>
-</div>
