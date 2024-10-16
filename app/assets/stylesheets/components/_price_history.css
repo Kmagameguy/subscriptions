@@ -1,0 +1,15 @@
+.price-history {
+    display: flex;
+    width: 24rem;
+    flex-direction: column;
+    border: 1px solid black;
+    transition: box-shadow 0.2s ease;
+    padding: 1rem 2rem;
+    cursor: default;
+    height: 100%;
+    justify-content:space-between;
+}
+
+.price-history:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}

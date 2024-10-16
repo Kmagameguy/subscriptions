@@ -16,6 +16,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-subscriptions_production}
       POSTGRES_USER: ${POSTGRES_USER:-subscriptions_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      TIME_ZONE: ${TIME_ZONE:-America/New_York}
     depends_on:
       postgres:
         condition: service_healthy

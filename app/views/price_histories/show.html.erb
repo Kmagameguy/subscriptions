@@ -1,0 +1,14 @@
+<div class="price-history-container">
+    <%= link_to sanitize("&larr; Back to Subscriptions"), root_path, { class: "back-link" } %>
+    <% if @price_history.load.any? %>
+        <h2>Price History for: <%= @price_history.first.subscription.name %></h2>
+        <% @price_history.reverse.each do |history| %>
+            <div class="price-history">
+            <p><%= friendly_effective_date(history.effective_date) %></p>
+            <p>
+                <%= number_to_currency history.price, unit: Subscription.currency %> <%= history.price_type %>
+            </p>
+            </div>
+        <% end %>
+    <% end %>
+</div>
