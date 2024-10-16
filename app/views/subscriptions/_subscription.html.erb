@@ -6,7 +6,7 @@
                 <h2><%= subscription.name %></h2>
             </div>
             <div class="subscription-price-change-percentage">
-                <p><%= percentage_increase_text(subscription) %></p>
+                <p><%= link_to percentage_increase_text(subscription), subscription_price_history_path(subscription), data: { turbo: false } %></p>
             </div>
         </div>
         <div class="subscription-footer">
