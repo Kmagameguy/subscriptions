@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   resources :users, only: %i[ index new create ]
   resource :user_sessions, only: %i[ new create destroy ]
   resources :subscriptions do
-    get 'price_history', to: 'price_histories#show', as: :price_history
+    get "price_history", to: "price_histories#show", as: :price_history
   end
 
   # Defines the root path route ("/")
