@@ -8,6 +8,7 @@ class SubscriptionTest < ActiveSupport::TestCase
       name: "My Subscription",
       price_type: Subscription.price_types[:monthly],
       price: 10.55.to_d,
+      subscribed_on: Date.current,
       user: @user
     )
   end
@@ -57,6 +58,13 @@ class SubscriptionTest < ActiveSupport::TestCase
 
       _(@subscription).must_be :invalid?
       _(@subscription.errors[:price]).must_include "must be greater than or equal to 0.0"
+    end
+
+    it "cannot have a subscribed_on date in the future" do
+      @subscription.subscribed_on = Date.current + 1.day
+
+      _(@subscription).must_be :invalid?
+      _(@subscription.errors[:subscribed_on]).must_include "cannot be in the future"
     end
   end
 

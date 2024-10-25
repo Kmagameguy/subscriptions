@@ -1,6 +1,7 @@
 class Subscription < ApplicationRecord
   validates :name, presence: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.00 }
+  validate  :subscribed_on_cannot_be_in_future
 
   enum :price_type, %i[ monthly annually ]
 
@@ -54,6 +55,12 @@ class Subscription < ApplicationRecord
   end
 
   private
+
+  def subscribed_on_cannot_be_in_future
+    if subscribed_on.present? && subscribed_on > Date.current
+        errors.add(:subscribed_on, "cannot be in the future")
+    end
+  end
 
   def track_price_change
     if price_changed? || price_type_changed?
