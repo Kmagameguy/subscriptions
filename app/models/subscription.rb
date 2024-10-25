@@ -1,6 +1,7 @@
 class Subscription < ApplicationRecord
   validates :name, presence: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.00 }
+  validate  :subscribed_on_cannot_be_in_future
 
   enum :price_type, %i[ monthly annually ]
 
@@ -13,6 +14,35 @@ class Subscription < ApplicationRecord
 
   def self.currency
     ENV.fetch("CURRENCY", "").presence || "$"
+  end
+
+  def renews_this_week?
+    return false unless subscribed_on.present?
+
+    (renews_on - Date.current).to_i <= 7
+  end
+
+  def renews_on
+    return unless subscribed_on.present?
+
+    current_date = Date.current
+    next_renewal = nil
+
+    if monthly?
+      next_renewal = subscribed_on.next_month
+
+      while next_renewal < current_date
+        next_renewal = next_renewal.next_month
+      end
+    else
+      next_renewal = subscribed_on.next_year
+
+      while next_renewal < current_date
+        next_renewal = next_renewal.next_year
+      end
+    end
+
+    next_renewal
   end
 
   def price_change_percentage
@@ -54,6 +84,12 @@ class Subscription < ApplicationRecord
   end
 
   private
+
+  def subscribed_on_cannot_be_in_future
+    if subscribed_on.present? && subscribed_on > Date.current
+        errors.add(:subscribed_on, "cannot be in the future")
+    end
+  end
 
   def track_price_change
     if price_changed? || price_type_changed?

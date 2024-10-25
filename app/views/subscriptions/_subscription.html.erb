@@ -1,6 +1,9 @@
 <%= turbo_frame_tag subscription do %>
     <div class="subscription">
         <div class="subscription-card-header">
+            <% if subscription.renews_this_week? %>
+              <p>Renews this week!</p>
+            <% end %>
             <div class="subscription-name">
                 <img src="<%= subscription.icon %>">
                 <h2><%= subscription.name %></h2>

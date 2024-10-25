@@ -8,6 +8,7 @@ class SubscriptionTest < ActiveSupport::TestCase
       name: "My Subscription",
       price_type: Subscription.price_types[:monthly],
       price: 10.55.to_d,
+      subscribed_on: Date.current,
       user: @user
     )
   end
@@ -57,6 +58,13 @@ class SubscriptionTest < ActiveSupport::TestCase
 
       _(@subscription).must_be :invalid?
       _(@subscription.errors[:price]).must_include "must be greater than or equal to 0.0"
+    end
+
+    it "cannot have a subscribed_on date in the future" do
+      @subscription.subscribed_on = Date.current + 1.day
+
+      _(@subscription).must_be :invalid?
+      _(@subscription.errors[:subscribed_on]).must_include "cannot be in the future"
     end
   end
 
@@ -120,6 +128,133 @@ class SubscriptionTest < ActiveSupport::TestCase
 
     it "returns nil if the url is not specified" do
       assert_nil @subscription.domain
+    end
+  end
+
+  describe "#renews_this_week?" do
+    describe "for monthly subscriptions" do
+      before do
+        Date.stubs(:current).returns(Date.parse("2024-10-20"))
+        @subscription.price_type = Subscription.price_types[:monthly]
+      end
+      it "is true if renewal is within a week" do
+        @subscription.subscribed_on = Date.parse("2023-10-27")
+
+        assert @subscription.renews_this_week?
+      end
+
+      it "is true if renewal is today" do
+        @subscription.subscribed_on = Date.parse("2023-10-20")
+
+        assert @subscription.renews_this_week?
+      end
+
+      it "is false if renewal is not within a week" do
+        @subscription.subscribed_on = Date.parse("2023-10-28")
+
+        assert_not @subscription.renews_this_week?
+      end
+
+      it "is false if renewal has passed" do
+        @subscription.subscribed_on = Date.parse("2023-10-19")
+
+        assert_not @subscription.renews_this_week?
+      end
+    end
+
+    describe "for annual subscriptions" do
+      before do
+        Date.stubs(:current).returns(Date.parse("2024-10-20"))
+        @subscription.price_type = Subscription.price_types[:annually]
+      end
+
+      it "is true if renewal is within a week" do
+        @subscription.subscribed_on = Date.parse("2023-10-27")
+
+        assert @subscription.renews_this_week?
+      end
+
+      it "is true if renewal is today" do
+        @subscription.subscribed_on = Date.parse("2023-10-20")
+
+        assert @subscription.renews_this_week?
+      end
+
+      it "is false if renewal is not within a week" do
+        @subscription.subscribed_on = Date.parse("2023-10-28")
+
+        assert_not @subscription.renews_this_week?
+      end
+
+      it "is false if renewal has passed" do
+        @subscription.subscribed_on = Date.parse("2023-10-19")
+
+        assert_not @subscription.renews_this_week?
+      end
+    end
+  end
+
+  describe "#renews_on" do
+    describe "for monthly subscriptions" do
+      before do
+        Date.stubs(:current).returns(Date.parse("2024-10-20"))
+        @subscription.price_type = Subscription.price_types[:monthly]
+      end
+
+      it "returns today if today is the renewal date" do
+        @subscription.subscribed_on = Date.parse("2023-10-20")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-10-20")
+      end
+
+      it "returns this month's date if it has not passed yet" do
+        @subscription.subscribed_on = Date.parse("2023-10-21")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-10-21")
+      end
+
+      it "returns next month's date if this month's renewal has passed" do
+        @subscription.subscribed_on = Date.parse("2023-10-19")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-11-19")
+      end
+
+      it "works within the same year" do
+        @subscription.subscribed_on = Date.parse("2024-09-20")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-10-20")
+      end
+    end
+
+    describe "for annnual subscriptions" do
+      before do
+        Date.stubs(:current).returns(Date.parse("2024-10-20"))
+        @subscription.price_type = Subscription.price_types[:annually]
+      end
+
+      it "returns today if today is the renewal date" do
+        @subscription.subscribed_on = Date.parse("2023-10-20")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-10-20")
+      end
+
+      it "returns this year's date if it has not passed yet" do
+        @subscription.subscribed_on = Date.parse("2023-10-21")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-10-21")
+      end
+
+      it "returns next year's date if this year's renewal has passed" do
+        @subscription.subscribed_on = Date.parse("2023-10-19")
+
+        assert_equal @subscription.renews_on, Date.parse("2025-10-19")
+      end
+
+      it "works within the same year" do
+        @subscription.subscribed_on = Date.parse("2024-10-19")
+
+        assert_equal @subscription.renews_on, Date.parse("2025-10-19")
+      end
     end
   end
 end
