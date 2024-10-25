@@ -16,6 +16,35 @@ class Subscription < ApplicationRecord
     ENV.fetch("CURRENCY", "").presence || "$"
   end
 
+  def renews_this_week?
+    return false unless subscribed_on.present?
+
+    (renews_on - Date.current).to_i <= 7
+  end
+
+  def renews_on
+    return unless subscribed_on.present?
+
+    current_date = Date.current
+    next_renewal = nil
+
+    if monthly?
+      next_renewal = subscribed_on.next_month
+
+      while next_renewal < current_date
+        next_renewal = next_renewal.next_month
+      end
+    else
+      next_renewal = subscribed_on.next_year
+
+      while next_renewal < current_date
+        next_renewal = next_renewal.next_year
+      end
+    end
+
+    next_renewal
+  end
+
   def price_change_percentage
     return Float::INFINITY if initial_monthly_price.zero?
 
