@@ -16,6 +16,10 @@
             <%= f.label :price, "Price in #{Subscription.currency}" %>
             <%= f.number_field :price, step: :any %>
         </div>
+        <div class="form-row">
+            <%= f.label :subscribed_on %>
+            <%= f.date_field :subscribed_on %>
+        </div>
         <div class="form-actions">
             <%= link_to "Cancel", subscriptions_path %>
             <%= f.submit %>
