@@ -132,7 +132,7 @@ GEM
     minitest-spec-rails (7.4.1)
       minitest (>= 5.0)
       railties (>= 4.1)
-    mocha (2.5.0)
+    mocha (2.6.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.5)
     net-imap (0.5.1)
