@@ -3,7 +3,7 @@ class Subscription < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.00 }
   validate  :subscribed_on_cannot_be_in_future
 
-  enum :price_type, %i[ monthly annually ]
+  enum :price_type, %i[ monthly annually quarterly ]
 
   has_many :price_histories, dependent: :destroy
   belongs_to :user
@@ -28,15 +28,19 @@ class Subscription < ApplicationRecord
     current_date = Date.current
     next_renewal = nil
 
-    if monthly?
+    case price_type
+    when "monthly"
       next_renewal = subscribed_on.next_month
-
       while next_renewal < current_date
         next_renewal = next_renewal.next_month
       end
+    when "quarterly"
+      next_renewal = subscribed_on.next_quarter
+      while next_renewal < current_date
+        next_renewal = next_renewal.next_quarter
+      end
     else
       next_renewal = subscribed_on.next_year
-
       while next_renewal < current_date
         next_renewal = next_renewal.next_year
       end
@@ -52,23 +56,39 @@ class Subscription < ApplicationRecord
   end
 
   def initial_monthly_price
-    (first_price_history.monthly? ? first_price_history.price : first_price_history.price / 12)
+    return initial_price.price if initial_price.monthly?
+
+    initial_price.price / (initial_price.quarterly? ? 3 : 12)
   end
 
   def initial_annual_price
-    (first_price_history.annually? ? first_price_history.price : first_price_history.price * 12)
+    return initial_price.price if initial_price.annually?
+
+    initial_price.price * (initial_price.monthly? ? 12 : 4)
   end
 
-  def first_price_history
-    @earliest_price_history ||= price_histories.order(effective_date: :asc).first
+  def initial_price
+    @initial_price ||= price_histories.order(effective_date: :asc).first
   end
 
   def monthly_price
-    (monthly? ? price : price / 12)
+    return price if monthly?
+    return (price * 4) / 12 if quarterly?
+
+    price / 12
+  end
+
+  def quarterly_price
+    return price if quarterly?
+    return price * 3 if monthly?
+
+    price / 4
   end
 
   def annual_price
-    (annually? ? price : price * 12)
+    return price if annually?
+
+    price * (monthly? ? 12 : 4)
   end
 
   def icon
