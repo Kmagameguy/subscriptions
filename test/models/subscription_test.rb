@@ -75,6 +75,12 @@ class SubscriptionTest < ActiveSupport::TestCase
       assert subscription.monthly?
     end
 
+    it "accepts a quarterly value" do
+      @subscription.price_type = Subscription.price_types[:quarterly]
+
+      assert @subscription.quarterly?
+    end
+
     it "accepts an annual value" do
       @subscription.price_type = Subscription.price_types[:annually]
 
@@ -97,11 +103,39 @@ class SubscriptionTest < ActiveSupport::TestCase
       assert_equal @subscription.price, @subscription.monthly_price
     end
 
+    it "divides the value by 3 if it's a quarterly subscription" do
+      @subscription.price_type = Subscription.price_types[:quarterly]
+      @subscription.price = 12.to_d
+
+      assert_equal 4.00, @subscription.monthly_price
+    end
+
     it "divides the value by 12 if it's an annual subscription" do
       @subscription.price_type = Subscription.price_types[:annually]
       @subscription.price = 12.to_d
 
       assert_equal 1.00, @subscription.monthly_price
+    end
+  end
+
+  describe "#quarterly_price" do
+    it "returns the database value if it's a quarterly subscription" do
+      @subscription.price_type = Subscription.price_types[:quarterly]
+
+      assert_equal @subscription.price, @subscription.quarterly_price
+    end
+
+    it "multiplies the value by 3 if it's a monthly subscription" do
+      @subscription.price = 2.00.to_d
+
+      assert_equal @subscription.price * 3, @subscription.quarterly_price
+    end
+
+    it "divides the value by 4 if it's an annual subscription" do
+      @subscription.price_type = Subscription.price_types[:annually]
+      @subscription.price = 8.00.to_d
+
+      assert_equal (@subscription.price / 4), @subscription.quarterly_price
     end
   end
 
@@ -115,7 +149,14 @@ class SubscriptionTest < ActiveSupport::TestCase
     it "multiplies the value by 12 if it's a monthly subscription" do
       @subscription.price = 1.00.to_d
 
-      assert_equal (@subscription.price * 12), @subscription.annual_price
+      assert_equal @subscription.price * 12, @subscription.annual_price
+    end
+
+    it "multiplies the value by 4 if it's a quarterly subscription" do
+      @subscription.price_type = Subscription.price_types[:quarterly]
+      @subscription.price = 4.00.to_d
+
+      assert_equal @subscription.price * 4, @subscription.annual_price
     end
   end
 
@@ -137,6 +178,38 @@ class SubscriptionTest < ActiveSupport::TestCase
         Date.stubs(:current).returns(Date.parse("2024-10-20"))
         @subscription.price_type = Subscription.price_types[:monthly]
       end
+
+      it "is true if renewal is within a week" do
+        @subscription.subscribed_on = Date.parse("2023-10-27")
+
+        assert @subscription.renews_this_week?
+      end
+
+      it "is true if renewal is today" do
+        @subscription.subscribed_on = Date.parse("2023-10-20")
+
+        assert @subscription.renews_this_week?
+      end
+
+      it "is false if renewal is not within a week" do
+        @subscription.subscribed_on = Date.parse("2023-10-28")
+
+        assert_not @subscription.renews_this_week?
+      end
+
+      it "is false if renewal has passed" do
+        @subscription.subscribed_on = Date.parse("2023-10-19")
+
+        assert_not @subscription.renews_this_week?
+      end
+    end
+
+    describe "for quarterly subscriptions" do
+      before do
+        Date.stubs(:current).returns(Date.parse("2024-10-20"))
+        @subscription.price_type = Subscription.price_types[:quarterly]
+      end
+
       it "is true if renewal is within a week" do
         @subscription.subscribed_on = Date.parse("2023-10-27")
 
@@ -223,6 +296,31 @@ class SubscriptionTest < ActiveSupport::TestCase
         @subscription.subscribed_on = Date.parse("2024-09-20")
 
         assert_equal @subscription.renews_on, Date.parse("2024-10-20")
+      end
+    end
+
+    describe "for quarterly subscriptions" do
+      before do
+        Date.stubs(:current).returns(Date.parse("2024-10-20"))
+        @subscription.price_type = Subscription.price_types[:quarterly]
+      end
+
+      it "returns today if today is the renewal date" do
+        @subscription.subscribed_on = Date.parse("2023-10-20")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-10-20")
+      end
+
+      it "returns this year's date if it has not passed yet" do
+        @subscription.subscribed_on = Date.parse("2023-10-21")
+
+        assert_equal @subscription.renews_on, Date.parse("2024-10-21")
+      end
+
+      it "returns next year's date if this year's renewal has passed" do
+        @subscription.subscribed_on = Date.parse("2023-10-19")
+
+        assert_equal @subscription.renews_on, Date.parse("2025-01-19")
       end
     end
 
