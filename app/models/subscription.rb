@@ -28,16 +28,16 @@ class Subscription < ApplicationRecord
     return unless subscribed_on.present?
 
     current_date = Date.current
-    next_date = subscribed_on
+    next_renewal = subscribed_on
     interval_months = PRICE_TYPE_INTERVALS_IN_MONTHS.fetch(price_type.to_sym) do
       raise ArgumentError, "Unsupported renewal interval: #{price_type}"
     end
 
-    while next_date < current_date
-      next_date = next_date.advance(months: interval_months)
+    while next_renewal < current_date
+      next_renewal = next_renewal.advance(months: interval_months)
     end
 
-    next_date
+    next_renewal
   end
 
   def price_change_percentage
@@ -54,7 +54,7 @@ class Subscription < ApplicationRecord
     initial_price.quarterly_price
   end
 
-  def initial_semiannually_price
+  def initial_semiannual_price
     initial_price.semiannual_price
   end
 
