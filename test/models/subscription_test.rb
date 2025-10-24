@@ -110,11 +110,25 @@ class SubscriptionTest < ActiveSupport::TestCase
       assert_equal 4.00, @subscription.monthly_price
     end
 
+    it "divides the value by 6 if it's a semiannual subscription" do
+      @subscription.price_type = Subscription.price_types[:semiannually]
+      @subscription.price = 12.to_d
+
+      assert_equal (@subscription.price / 6), @subscription.monthly_price
+    end
+
     it "divides the value by 12 if it's an annual subscription" do
       @subscription.price_type = Subscription.price_types[:annually]
       @subscription.price = 12.to_d
 
-      assert_equal 1.00, @subscription.monthly_price
+      assert_equal (@subscription.price / 12), @subscription.monthly_price
+    end
+
+    it "divides the value by 24 if it's a biennial subscription" do
+      @subscription.price_type = Subscription.price_types[:biennially]
+      @subscription.price = 48.to_d
+
+      assert_equal (@subscription.price / 24), @subscription.monthly_price
     end
   end
 
@@ -128,7 +142,14 @@ class SubscriptionTest < ActiveSupport::TestCase
     it "multiplies the value by 3 if it's a monthly subscription" do
       @subscription.price = 2.00.to_d
 
-      assert_equal @subscription.price * 3, @subscription.quarterly_price
+      assert_equal (@subscription.price * 3), @subscription.quarterly_price
+    end
+
+    it "divides the value by 2 if it's a semiannual subscription" do
+      @subscription.price_type = Subscription.price_types[:semiannually]
+      @subscription.price = 20.00.to_d
+
+      assert_equal (@subscription.price / 2), @subscription.quarterly_price
     end
 
     it "divides the value by 4 if it's an annual subscription" do
@@ -136,6 +157,48 @@ class SubscriptionTest < ActiveSupport::TestCase
       @subscription.price = 8.00.to_d
 
       assert_equal (@subscription.price / 4), @subscription.quarterly_price
+    end
+
+    it "divides the value by 8 if it's a biennial subscription" do
+      @subscription.price_type = Subscription.price_types[:biennially]
+      @subscription.price = 24.00.to_d
+
+      assert_equal (@subscription.price / 8), @subscription.quarterly_price
+    end
+  end
+
+  describe "#semiannual_price" do
+    it "returns the database value if it's a semiannual subscription" do
+      @subscription.price_type = Subscription.price_types[:semiannually]
+
+      assert_equal @subscription.price, @subscription.semiannual_price
+    end
+
+    it "multiplies the value by 6 if it's a monthly subscription" do
+      @subscription.price = 2.00.to_d
+
+      assert_equal (@subscription.price * 6), @subscription.semiannual_price
+    end
+
+    it "multiplies the value by 2 if it's a quarterly subscription" do
+      @subscription.price_type = Subscription.price_types[:quarterly]
+      @subscription.price = 2.00.to_d
+
+      assert_equal (@subscription.price * 2), @subscription.semiannual_price
+    end
+
+    it "divides the value by 2 if it's an annual subscription" do
+      @subscription.price_type = Subscription.price_types[:annually]
+      @subscription.price = 10.00.to_d
+
+      assert_equal (@subscription.price / 2), @subscription.semiannual_price
+    end
+
+    it "divides the value by 4 if it's a biennial subscription" do
+      @subscription.price_type = Subscription.price_types[:biennially]
+      @subscription.price = 16.00.to_d
+
+      assert_equal (@subscription.price / 4), @subscription.semiannual_price
     end
   end
 
@@ -149,14 +212,64 @@ class SubscriptionTest < ActiveSupport::TestCase
     it "multiplies the value by 12 if it's a monthly subscription" do
       @subscription.price = 1.00.to_d
 
-      assert_equal @subscription.price * 12, @subscription.annual_price
+      assert_equal (@subscription.price * 12), @subscription.annual_price
     end
 
     it "multiplies the value by 4 if it's a quarterly subscription" do
       @subscription.price_type = Subscription.price_types[:quarterly]
       @subscription.price = 4.00.to_d
 
-      assert_equal @subscription.price * 4, @subscription.annual_price
+      assert_equal (@subscription.price * 4), @subscription.annual_price
+    end
+
+    it "multiplies the value by 2 if it's a semiannual subscription" do
+      @subscription.price_type = Subscription.price_types[:semiannually]
+      @subscription.price = 12.00.to_d
+
+      assert_equal (@subscription.price * 2), @subscription.annual_price
+    end
+
+    it "divides the value by 2 if it's a biennial subscription" do
+      @subscription.price_type = Subscription.price_types[:biennially]
+      @subscription.price = 48.00.to_d
+
+      assert_equal (@subscription.price / 2), @subscription.annual_price
+    end
+  end
+
+  describe "#biennial_price" do
+    it "returns the database value if it's a biennial subscription" do
+      @subscription.price_type = Subscription.price_types[:biennially]
+      @subscription.price = 22.00.to_d
+
+      assert_equal @subscription.price, @subscription.biennial_price
+    end
+
+    it "multiplies the value by 24 if it's a monthly subscription" do
+      @subscription.price = 12.00.to_d
+
+      assert_equal (@subscription.price * 24), @subscription.biennial_price
+    end
+
+    it "multiplies the value by 8 if it's a quarterly subscription" do
+      @subscription.price_type = Subscription.price_types[:quarterly]
+      @subscription.price = 12.00.to_d
+
+      assert_equal (@subscription.price * 8), @subscription.biennial_price
+    end
+
+    it "multiplies the value by 4 if it's a semiannual subscription" do
+      @subscription.price_type = Subscription.price_types[:semiannually]
+      @subscription.price = 12.00.to_d
+
+      assert_equal (@subscription.price * 4), @subscription.biennial_price
+    end
+
+    it "multiplies the value by 2 if it's an anuual subscription" do
+      @subscription.price_type = Subscription.price_types[:annually]
+      @subscription.price = 12.00.to_d
+
+      assert_equal (@subscription.price * 2), @subscription.biennial_price
     end
   end
 
