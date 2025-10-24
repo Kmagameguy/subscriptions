@@ -8,7 +8,7 @@ This is a simple rails application for managing and tracking your personal subsc
 
 ## Features
 1. Track your subscriptions in the currency of your choice
-1. Support for monthly and annually recurring subscriptions
+1. Support for monthly, quarterly, semi-annually (twice a year), annually, and biennially (every two years) recurring subscriptions
 1. Track price change history; Each edit to an existing subscription is cataloged so you can see the % increase since you first signed up
 1. Separate user accounts so you and anyone else can track their own subscriptions
 
