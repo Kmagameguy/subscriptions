@@ -5,7 +5,7 @@ class Subscription < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.00 }
   validate  :subscribed_on_cannot_be_in_future
 
-  enum :price_type, %i[ monthly annually quarterly semiannually biennially ]
+  enum :price_type, ::PriceTypeable::PRICE_TYPES
 
   has_many :price_histories, dependent: :destroy
   belongs_to :user
